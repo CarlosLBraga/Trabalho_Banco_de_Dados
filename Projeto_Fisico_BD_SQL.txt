@@ -1,0 +1,254 @@
+create table funcionario (
+matricula varchar (7) not null ,
+cpf varchar (11) not null,
+idade date,
+data_admissao date,
+sexo enum ('f','m'),
+telf_funcionario varchar (11),
+turno enum ('amanha','tarde'),
+end_funcio enum ('rio','mage','niteroi','sao gonçalo', 'caxias', 'mesquita'),
+altura float (10.0),
+);
+
+alter table funcionario add constraint primary key (matricula);
+alter table funcionario add constraint unique (cpf);
+
+create table chefe (
+n_chefe varchar (7),
+matricula_f varchar (7) not null,
+);
+
+alter table add constraint  fk_matricula_f foreing key (matricula_f) references funcionario (matricula);
+
+create table operador (
+n_operador varchar (7),
+matricula_f varchar (7) not null,
+supervisao_chefe varchar (7),
+);
+
+alter table add constraint  fk_matricula_f foreing key (matricula_f) references funcionario (matricula);
+alter table add constraint  fk_supervisao_chefe foreing key (matricula_f) references funcionario (matricula);
+
+
+create table acougue  (
+cod_acougue  int (3),
+tipo_carne enum (‘bovino’,’suino’,’ave’),
+conserva enum (‘congelado’,’resfriado’),
+validade date,
+);
+
+alter table acougue add constraint primary key (cod_acougue);
+
+create table controle_qualidade (
+cod_relatorio int (2) not null auto_increment,
+data_relatorio date,
+nota_relatorio varchar (1),
+cod_acougue int (11),
+);
+
+alter table controle_qualidade add constraint primary key (cod_relatorio);
+alter table controle_qualidade add constraint fk_controle foreign key (cod_acougue) references dristibuidora (cod_acougue); 
+
+
+create table beneficios (
+n_beneficio varchar (10) not null,
+data_contrataddo date,
+data_cessado date,
+matricula_funcionario varchar (11) not null,
+cod_rh varchar(10) not null;
+);
+
+alter table beneficios add constraint primary key n_beneficio;
+alter table beneficios add constraint fk_matricula_funcionario foreign key (matricula_funcionario) references funcionario (matricula); 
+
+
+create table cliente (
+id_client int (11) not null auto_increment,
+nome varchar (20),
+tel_cliente varchar(11),
+end_cliente enum ('rio','caxias','niteroi','sg','mage')    
+);
+
+
+alter table cliente add constraint primary key (id_client);
+
+create table cliente_f (
+id_client int (11) not null auto_increment,
+cpf varchar (11),
+);
+
+
+alter table cliente_f add constraint fk_id_cliente foreign key (id_client) references cliente (id_client); 
+alter table cliente add constraint unique (cpf);
+
+create table cliente_j (
+id_client int (11) not null auto_increment,
+cnpj varchar (14),
+);
+
+alter table cliente_j add constraint fk_id_cliente foreign key (id_client) references cliente (id_client); 
+alter table cliente add constraint unique (cnpj);
+
+create table compra (
+n_compra varchar (10) not null,
+data_compra date,
+cod-distri varchar (12),
+n_palete varchar (3),
+valor compra float ;
+);
+
+alter table compra add constraint primary key (n_compra);
+alter table compra add constraint fk_compra foreign key (cod_distri) references dristibuidora (cod_distri); 
+
+create dependente (
+id_client int (11) not null auto_increment,
+cpf varchar (11),
+nome varchar(20),
+nascimento date,
+sexo enum ('M','F'), 
+mat_funcio varchar (7),   
+);
+alter table dependente add constraint primary key (id);
+alter table dependente add constraint unique (cpf);
+alter table dependente add constraint fk_mat_funcio foreign key (mat_funcio) references funcionario (matricula);
+
+create table distribuidora (
+cod_distri varchar (12) not null,
+data_entrega date,
+cod_marca varchar (8),
+estado_distribuidor enum ('RJ','SP','MG','AM','PE','BA','SC')
+);
+
+alter table distribuidora add constraint primary key (cod_distri);
+alter table distribuidora add constraint fk_cod_marca foreign key (cod_marca) references marca (cod_marca);
+
+
+create table estoque (
+cod_estoque varchar (4),
+n_deposito	varchar(2),
+local_deposito	enum('aereo','piso'),
+cod_mercearia	varchar(6),
+n_palete	varchar(2),
+estoque_peso_kg	varchar(3),
+)
+
+alter table estoque add constraint primary key (cod_estoque);
+alter table estoque add constraint fk_cod_mercearia foreign key (cod_mercearia) references mercearia (cod_mercearia);
+
+create table f_caixa (
+cod_fcaixa varchar(4),
+n_pdv	varchar(1),
+);
+
+alter table f_caixa add constraint primary key (cod_fcaixa);
+alter table f_caixa add constraint unique (n_pdv);
+
+create table sac (
+n_atendimento int(3),
+hora date,
+id_client int(11)
+);
+
+alter table sac add constraint primary key (n_atendimento);
+alter table sac add constraint fk_sac foreign key (id_client) references cliente (id_client);
+
+
+create table televendas (
+n_pedido int(4) not null auto_increment
+data_pedido date
+);
+
+alter table televendas add constraint primary key (n_pedido);
+alter table televendas add constraint fk_televendas foreign key (id_client) references cliente (id_client);
+
+create table item_estoque (
+n_lote	varchar(4)
+date_entrada	date
+validade	date
+tipo_produto	enum('alto_giro','doce','liquida','bazar','salgado','perfumaria','limpeza','perecivel')
+cod_estoque	varchar(4)
+);
+
+alter table item_estoque add constraint primary key (n_lote);
+alter table item_estoque add constraint fk_cod_estoque foreign key (cod-estoque) references estoque (cod_estoque);
+
+
+create table produto (
+cod_barra varchar(8)
+n_lote int(11)
+);
+
+alter table produto add constraint primary key (cod_barras);
+alter table produto add constraint fk_produto foreign key (n_lote) references estoque (n_estoque);
+
+
+create table marca (
+cod_marca	varchar(8)
+cpnj	varchar(14)
+nome	varchar(10)
+estado_produtor	enum('SP','RJ','AM','MG','SC','PE','MT','BA')
+
+);
+
+
+alter table marca add constraint primary key (cod_marca);
+alter table marca add constraint unique (cnpj);
+
+create table promotor (
+id_promotor varchar(30)
+cpf_promotor varchar(11)
+nome varchar(15)
+cod_marca int(11)
+);
+
+alter table promotor add constraint primary key (id_promotor);
+alter table promotor add constraint unique (cpf);
+alter table promotor add constraint fk_promotor foreign key (cod_marca) references marca (cod_marca);
+
+
+create table mercado (
+end_mercado	varchar(20)
+telf_mercado	varchar(12)
+n_mercado	varchar(3)
+cnpj	varchar(14)
+);
+
+alter table mercado add constraint primary key (n_mercado);
+alter table mercado add constraint unique (cnpj);
+
+create table mercearia (
+cod_mercearia	varchar(6)
+n_setor	varchar(1)
+);
+
+alter table mercearia add constraint primary key (cod_mercearia);
+alter table mercearia add constraint unique (n_setor);
+
+
+create table vendas (
+nota_fiscal varchar(5) not null,
+id_client int(11),
+cod_barras int(11),
+n_pdv varchar(1),
+valor_venda float
+);
+
+alter table vendas add constraint primary key (nota_fiscal);
+alter table vendas add constraint fk_vendas_cliente foreign key (id_client) references cliente (id_client);
+alter table vendas add constraint fk_vendas_produto foreign key (cod_barras) references produto (cod_barras);
+alter table vendas add constraint fk_vendas_pdv foreign key (n_pdv) references f_caixa (n_pdv);
+alter table vendas add constraint fk_vendas_pedido foreign key (n_pedido) references televendas (n_pedido);
+
+
+create table rh (
+cod_rh varchar(10)
+);
+alter table add constraint primary key (cod_rh);
+
+
+
+
+
+
+
+
