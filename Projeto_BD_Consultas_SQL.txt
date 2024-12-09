@@ -1,0 +1,38 @@
+select * from distribuidora where data_entrega between 20200101 and 20221231;
+
+select * from controle_qualidade where data_relatorio between 20200101 and 20221231;
+
+select * from controle_qualidade where nota_relatorio < 5;
+
+select * from acougue where tipo_carne = 'bovino';
+
+select produto.cod_barras, vendas.id_client from produto join vendas on produto.cod_barras = vendas.cod_barras;
+
+select nome from promotor where cod_marca = 7;
+
+select cliente.nome, vendas.n_pdv, vendas.valor_venda from cliente join vendas on cliente.id_client = vendas.id_client; 
+
+select * from item_estoque t join produto p on t.n_lote = p.n_lote;
+
+
+select p.cod_barras, t.validade from item_estoque t join produto p on t.n_lote = p.n_lote;
+
+select avg (n_palete) as media_palete from estoque;
+
+select sum(estoque_peso_kg) as soma_peso from estoque;
+
+select count(*) from item_estoque where validade between 20180101 and 20201231;
+
+select validade from item_estoque where validade between 20180101 and 20201231;
+
+select sum(valor_compra) as soma_valor_compra from compra where data_compra between 20200101 and 20221231;
+select m.cod_marca, m.nome, pro.nome from marca m join promotor pro on m.cod_marca = pro.cod_marca;
+
+select id_client, n_pdv, valor_venda from vendas where valor_venda > 2000;
+
+select v.id_client, v.valor_venda, c.nome, cpf.cpf from vendas v join cliente c join cliente_f cpf on c.id_client = cpf.id_client;
+
+select id_client, valor_venda from vendas where n_pedido is null;
+
+select f.matricula, f.cpf, f.data_adimissao, b.data_contratado, b.data_cessado from funcionario f join beneficios b on f.matricula = b.matricula_funcionario where data_cessado is not null;
+
